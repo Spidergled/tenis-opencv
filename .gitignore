@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Resultados generados por el programa (se crean al ejecutarlo)
+salida/*
+# ... salvo las esquinas marcadas a mano del vídeo de tierra batida
+!salida/video_input8/
+salida/video_input8/*
+!salida/video_input8/esquinas.json
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,119 @@
+CÓMO ARRANCAR EL PROYECTO
+=========================
+
+Análisis de partidos de tenis con visión por computador clásica (Python + OpenCV).
+
+
+1. REQUISITOS
+-------------
+- Python 3.9 o superior (https://www.python.org).
+  Al instalarlo, marca la casilla "Add Python to PATH".
+- Las librerías OpenCV y NumPy (se instalan en el paso 3).
+
+
+2. ABRIR UNA TERMINAL EN LA CARPETA DEL PROYECTO
+-------------------------------------------------
+La carpeta correcta es la que contiene main.py.
+
+En Windows:
+  a) Abre esa carpeta en el Explorador de archivos.
+  b) Haz clic en la barra de direcciones (donde aparece la ruta).
+  c) Escribe  cmd  y pulsa Enter.
+Se abrirá una terminal situada ya en la carpeta.
+
+Para comprobarlo, escribe:
+  dir main.py
+Debe aparecer el archivo. Si no aparece, entra en la subcarpeta tenis_cv:
+  cd tenis_cv
+
+
+3. INSTALAR LAS LIBRERÍAS (SOLO LA PRIMERA VEZ)
+-----------------------------------------------
+  py -m pip install -r requirements.txt
+
+
+4. ANALIZAR UN VÍDEO
+--------------------
+  py main.py videos\partido_prueba.mp4
+
+Tarda entre 20 segundos y 2 minutos, según la duración del vídeo.
+Mientras trabaja, va mostrando el progreso.
+
+
+5. ANALIZAR TODOS LOS VÍDEOS DE UNA VEZ
+---------------------------------------
+  for %f in (videos\*.mp4) do py main.py "%f"
+
+El vídeo de tierra batida video_input8 necesita después el modo manual
+(ver el punto 6):
+  py main.py videos\video_input8.mp4 --manual
+
+
+6. OPCIONES
+-----------
+  --manual          Si las líneas amarillas no encajan con la pista, marca tú
+                    las 4 esquinas de la pista de dobles con el ratón, en este
+                    orden: arriba izquierda, arriba derecha, abajo derecha,
+                    abajo izquierda. Se guardan y la siguiente vez no se piden.
+                    (Las del vídeo video_input8 ya vienen guardadas.)
+
+  --max-frames N    Procesa solo los N primeros fotogramas. Útil para una
+                    prueba rápida o para la demo en clase. Ejemplo:
+                    py main.py videos\video_input2.mp4 --max-frames 150
+
+  --sin-pelota      No busca la pelota (va más rápido).
+
+
+7. RESULTADOS
+-------------
+Se guardan en  salida\<nombre_del_vídeo>\ :
+
+  <nombre>_analizado.mp4   Vídeo con la pista, los jugadores, la pelota,
+                           el minimapa y las estadísticas
+  pista_detectada.jpg      Comprobación de la pista (revísala siempre)
+  mapa_calor.png           Zonas por las que se ha movido cada jugador
+  posiciones.csv           Posición de cada jugador y de la pelota
+                           en cada fotograma
+  resumen.json             Distancia total y velocidades de cada jugador
+  fondo.jpg, mascara_lineas.png   Imágenes intermedias del proceso
+
+Para abrir la carpeta de resultados:
+  start salida
+
+
+8. VÍDEOS INCLUIDOS (carpeta videos)
+------------------------------------
+  partido_prueba.mp4   Djokovic - Sonego      Pista dura    Funciona
+  video_input2.mp4     Djokovic - Sonego      Pista dura    Funciona (15 s, 60 fps)
+  video_input3.mp4     Nadal - Dimitrov       Pista dura    Funciona
+  video_input4.mp4     Monfils - Paire        Pista dura    Funciona
+  video_input6.mp4     Shapovalov - Tiafoe    Pista dura    Funciona
+  video_input8.mp4     Tsitsipas - Rublev     Tierra        Necesita --manual
+  video_input5.mp4     Djokovic - Del Potro   Tierra        Falla: la cámara se mueve
+
+Para usar un vídeo propio: cópialo en la carpeta videos y ejecuta
+  py main.py videos\nombre_de_tu_video.mp4
+Grábalo con el móvil fijo en un trípode, detrás de una línea de fondo, lo más
+alto posible, con la pista entera a la vista (mejor a 1080p y 60 fps).
+
+
+9. PROBLEMAS FRECUENTES
+-----------------------
+"py" no se reconoce como un comando
+    Prueba con  python  en lugar de  py . Si tampoco funciona, instala Python
+    marcando "Add Python to PATH".
+
+ModuleNotFoundError: No module named 'cv2'
+    No se han instalado las librerías. Ejecuta:
+    py -m pip install opencv-python numpy
+
+No encuentro el vídeo ...
+    Revisa el nombre. Windows a veces oculta la extensión y el archivo
+    acaba llamándose  video.mp4.mp4 .
+
+Las líneas amarillas no coinciden con la pista
+    Vuelve a ejecutarlo con  --manual .
+
+
+Más información: README.md (descripción del proyecto) y FUNCIONES.md
+(documentación de las funciones de OpenCV utilizadas).
