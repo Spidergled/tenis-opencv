@@ -44,9 +44,6 @@ Mientras trabaja, va mostrando el progreso.
 ---------------------------------------
   for %f in (videos\*.mp4) do py main.py "%f"
 
-El vídeo de tierra batida video_input8 necesita después el modo manual
-(ver el punto 6):
-  py main.py videos\video_input8.mp4 --manual
 
 
 6. OPCIONES
@@ -83,18 +80,9 @@ Para abrir la carpeta de resultados:
 
 8. VÍDEOS INCLUIDOS (carpeta videos)
 ------------------------------------
-  partido_prueba.mp4   Djokovic - Sonego      Pista dura    Funciona
-  video_input2.mp4     Djokovic - Sonego      Pista dura    Funciona (15 s, 60 fps)
-  video_input3.mp4     Nadal - Dimitrov       Pista dura    Funciona
-  video_input4.mp4     Monfils - Paire        Pista dura    Funciona
-  video_input6.mp4     Shapovalov - Tiafoe    Pista dura    Funciona
-  video_input8.mp4     Tsitsipas - Rublev     Tierra        Necesita --manual
-  video_input5.mp4     Djokovic - Del Potro   Tierra        Falla: la cámara se mueve
 
 Para usar un vídeo propio: cópialo en la carpeta videos y ejecuta
   py main.py videos\nombre_de_tu_video.mp4
-Grábalo con el móvil fijo en un trípode, detrás de una línea de fondo, lo más
-alto posible, con la pista entera a la vista (mejor a 1080p y 60 fps).
 
 
 9. PROBLEMAS FRECUENTES
@@ -107,9 +95,6 @@ ModuleNotFoundError: No module named 'cv2'
     No se han instalado las librerías. Ejecuta:
     py -m pip install opencv-python numpy
 
-No encuentro el vídeo ...
-    Revisa el nombre. Windows a veces oculta la extensión y el archivo
-    acaba llamándose  video.mp4.mp4 .
 
 Las líneas amarillas no coinciden con la pista
     Vuelve a ejecutarlo con  --manual .
