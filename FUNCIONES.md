@@ -2,56 +2,56 @@
 
 El proyecto usa solo **OpenCV** y **NumPy**, sin ningún modelo de IA, Machine Learning ni Deep Learning.
 
-Casi todas las funciones se han visto en los debates de la asignatura. Se indica en cuál.
+Casi todas las funciones se han visto en la asignatura.
 Solo dos funciones de OpenCV no se vieron en clase: `cv2.HoughLinesP` y `cv2.findHomography`.
-Las dos están en los tutoriales oficiales de OpenCV para Python (docs.opencv.org), como recomienda
-el debate 39. Se explican con más detalle al final, porque son imprescindibles para el proyecto y
+Las dos están en los tutoriales oficiales de OpenCV para Python (docs.opencv.org)
+Se explican con más detalle al final, porque son imprescindibles para el proyecto y
 no tienen sustituto entre las funciones vistas.
 
 ## 1. Funciones vistas en clase
 
 ### Vídeo, imágenes y ventanas
 
-| Función | Uso en el proyecto | Fichero | Debates |
+| Función | Uso en el proyecto | Fichero |
 |---|---|---|---|
-| `cv2.VideoCapture` | Abrir el vídeo del partido y leerlo fotograma a fotograma (`read`) | main.py, jugadores.py | 64–67 |
-| `cv2.VideoWriter`, `cv2.VideoWriter_fourcc` | Guardar el vídeo analizado (códec `mp4v`) | main.py | 65, 66 |
-| `cv2.imwrite` | Guardar el fondo, la máscara de líneas, la pista detectada y el mapa de calor | main.py, metricas.py | 8, 65 |
-| `cv2.imshow`, `cv2.waitKey`, `cv2.destroyAllWindows` | Ventana para marcar la pista a mano (modo `--manual`) | pista.py | casi todos |
-| `cv2.namedWindow`, `cv2.setMouseCallback` | Recoger los 4 clics del ratón en las esquinas de la pista | pista.py | 17, 18–22 |
-| `cv2.resize` | Reducir cada fotograma a 960 px de ancho para procesar más rápido | jugadores.py | 23 |
+| `cv2.VideoCapture` | Abrir el vídeo del partido y leerlo fotograma a fotograma (`read`) | main.py, jugadores.py |
+| `cv2.VideoWriter`, `cv2.VideoWriter_fourcc` | Guardar el vídeo analizado (códec `mp4v`) | main.py |
+| `cv2.imwrite` | Guardar el fondo, la máscara de líneas, la pista detectada y el mapa de calor | main.py, metricas.py |
+| `cv2.imshow`, `cv2.waitKey`, `cv2.destroyAllWindows` | Ventana para marcar la pista a mano (modo `--manual`) | pista.py |
+| `cv2.namedWindow`, `cv2.setMouseCallback` | Recoger los 4 clics del ratón en las esquinas de la pista | pista.py |
+| `cv2.resize` | Reducir cada fotograma a 960 px de ancho para procesar más rápido | jugadores.py |
 
 ### Procesado de imagen
 
-| Función | Uso en el proyecto | Fichero | Debates |
+| Función | Uso en el proyecto | Fichero |
 |---|---|---|---|
-| `cv2.cvtColor` (`BGR2GRAY`, `BGR2HSV`) | Pasar a gris (diferencias, top-hat) y a HSV (brillo y saturación) | pista.py, main.py | 9, 28, 29 |
-| `cv2.inRange` | Máscara de píxeles blancos: saturación baja y brillo alto en HSV | pista.py | 28, 79 |
-| `cv2.threshold` (`THRESH_BINARY`) | Binarizar diferencias, top-hat y brillo | pista.py, jugadores.py, pelota.py | 31, 32, 44–48 |
-| `cv2.blur` | Suavizado por media antes de comparar con el fondo, y suavizado del mapa de calor | jugadores.py, metricas.py | 34, 40 |
-| `cv2.subtract` | Top-hat (original − apertura) y diferencia absoluta (ver abajo) | pista.py, jugadores.py | 25, 40, 54 |
-| `cv2.add` | Suma de las dos restas para obtener la diferencia absoluta | jugadores.py | 26 |
-| `cv2.bitwise_and` | Combinar máscaras (líneas ∧ blanco; movimiento ∧ brillo ∧ zona válida) | pista.py, pelota.py | 26, 28 |
-| `cv2.erode`, `cv2.dilate` | Apertura, cierre y top-hat construidos a mano (ver abajo) | pista.py, jugadores.py, pelota.py | 35, 36, 79 |
-| `np.ones` | Kernels de la morfología | pista.py, jugadores.py, pelota.py | 35, 36, 51 |
+| `cv2.cvtColor` (`BGR2GRAY`, `BGR2HSV`) | Pasar a gris (diferencias, top-hat) y a HSV (brillo y saturación) | pista.py, main.py |
+| `cv2.inRange` | Máscara de píxeles blancos: saturación baja y brillo alto en HSV | pista.py |
+| `cv2.threshold` (`THRESH_BINARY`) | Binarizar diferencias, top-hat y brillo | pista.py, jugadores.py, pelota.py |
+| `cv2.blur` | Suavizado por media antes de comparar con el fondo, y suavizado del mapa de calor | jugadores.py, metricas.py |
+| `cv2.subtract` | Top-hat (original − apertura) y diferencia absoluta (ver abajo) | pista.py, jugadores.py |
+| `cv2.add` | Suma de las dos restas para obtener la diferencia absoluta | jugadores.py |
+| `cv2.bitwise_and` | Combinar máscaras (líneas ∧ blanco; movimiento ∧ brillo ∧ zona válida) | pista.py, pelota.py |
+| `cv2.erode`, `cv2.dilate` | Apertura, cierre y top-hat construidos a mano (ver abajo) | pista.py, jugadores.py, pelota.py |
+| `np.ones` | Kernels de la morfología | pista.py, jugadores.py, pelota.py |
 
 ### Contornos
 
-| Función | Uso en el proyecto | Fichero | Debates |
+| Función | Uso en el proyecto | Fichero |
 |---|---|---|---|
-| `cv2.findContours` (`RETR_EXTERNAL`, `CHAIN_APPROX_SIMPLE`) | Separar las manchas de movimiento: personas y candidatos a pelota | jugadores.py, pelota.py | 44–48, 50 |
-| `cv2.contourArea` | Descartar manchas pequeñas que no pueden ser un jugador | jugadores.py | 46–48 |
-| `cv2.boundingRect` | Rectángulo del jugador (y punto de sus pies) y tamaño de la pelota | jugadores.py, pelota.py | 50, 51, 54 |
+| `cv2.findContours` (`RETR_EXTERNAL`, `CHAIN_APPROX_SIMPLE`) | Separar las manchas de movimiento: personas y candidatos a pelota | jugadores.py, pelota.py |
+| `cv2.contourArea` | Descartar manchas pequeñas que no pueden ser un jugador | jugadores.py |
+| `cv2.boundingRect` | Rectángulo del jugador (y punto de sus pies) y tamaño de la pelota | jugadores.py, pelota.py |
 
 ### Dibujo
 
-| Función | Uso en el proyecto | Fichero | Debates |
+| Función | Uso en el proyecto | Fichero |
 |---|---|---|---|
-| `cv2.line` | Líneas de la pista proyectadas y estelas del minimapa | pista.py, metricas.py | 10, 19, 80 |
-| `cv2.circle` | Pelota, estela de la pelota y jugadores en el minimapa | main.py, metricas.py | 14, 21, 79 |
-| `cv2.rectangle` | Recuadros de los jugadores y marco del minimapa | main.py, metricas.py | 12, 13, 50 |
-| `cv2.putText` | Nombres y estadísticas (distancia, velocidad) | main.py, metricas.py | 15, 16 |
-| `cv2.addWeighted` | Minimapa semitransparente sobre el vídeo | metricas.py | 24 |
+| `cv2.line` | Líneas de la pista proyectadas y estelas del minimapa | pista.py, metricas.py |
+| `cv2.circle` | Pelota, estela de la pelota y jugadores en el minimapa | main.py, metricas.py | 
+| `cv2.rectangle` | Recuadros de los jugadores y marco del minimapa | main.py, metricas.py |
+| `cv2.putText` | Nombres y estadísticas (distancia, velocidad) | main.py, metricas.py |
+| `cv2.addWeighted` | Minimapa semitransparente sobre el vídeo | metricas.py |
 
 ## 2. Técnicas construidas con funciones vistas en clase
 
@@ -148,5 +148,5 @@ la misma distancia en píxeles equivale a muchos más metros al fondo que cerca.
 | `cv2.CAP_PROP_POS_FRAMES` | Saltar a un fotograma concreto (`cap.set`) para calcular el fondo |
 | `cv2.INTER_AREA` | Interpolación de `resize` recomendada para reducir imágenes |
 | `cv2.LINE_AA` | Dibujo con antialiasing (bordes suaves) |
-| `cv2.FONT_HERSHEY_SIMPLEX` | Tipo de letra de `putText` (debates 15, 16) |
+| `cv2.FONT_HERSHEY_SIMPLEX` | Tipo de letra de `putText` |
 | `cv2.EVENT_LBUTTONDOWN` | Clic izquierdo del ratón en el modo manual |
